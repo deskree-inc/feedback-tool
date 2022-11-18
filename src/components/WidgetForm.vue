@@ -12,8 +12,10 @@ const props = defineProps<{
   };
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (event: 'back', ...args: any[]): void;
+  (event: 'success', ...args: any[]): void;
+  (event: 'feedback_uid', ...args: any[]): void;
 }>();
 
 interface SendFeedbackBodyInterface {
@@ -62,7 +64,7 @@ async function createIssueOnGitHub(body: GitHubCreateIssueInterface) {
 
 async function createFeedback(body: SendFeedbackBodyInterface) {
   try {
-    await fetch(
+    const res = await fetch(
       'https://feedback-tool.api.deskree.com/api/v1/rest/collections/feedbacks',
       {
         method: 'POST',
@@ -70,6 +72,9 @@ async function createFeedback(body: SendFeedbackBodyInterface) {
         body: JSON.stringify(body),
       }
     );
+
+    const { data } = await res.json();
+    emit('feedback_uid', data.uid);
   } catch (e) {
     console.error(e);
     // TODO: Catch error
@@ -90,16 +95,17 @@ async function sendFeedback() {
 
   await createFeedback(feedbackBody);
 
-  const gitHubBody: GitHubCreateIssueInterface = {
-    title: 'Bug Found by User',
-    body: message.value,
-  };
-
   if (props.feedback.type === 'bug') {
-    console.log('create issue on gh');
+    const gitHubBody: GitHubCreateIssueInterface = {
+      title: 'Bug Found by User',
+      body: message.value,
+    };
 
     await createIssueOnGitHub(gitHubBody);
   }
+
+  message.value = '';
+  emit('success');
 }
 </script>
 
@@ -148,7 +154,8 @@ async function sendFeedback() {
           <button
             v-else
             type="button"
-            class="p-1 w-10 rounded-md border-transparent flex justify-end items-end text-zinc-400 hover:text-zinc-100 transition-colors"
+            @click="image = undefined"
+            class="p-1 w-8 h-8 rounded-md border-2 border-deskree-300 flex justify-end items-end text-zinc-400 hover:text-zinc-100 transition-colors"
             :style="{ backgroundImage: `url(${image})` }"
             style="background-position: bottom right; background-size: 180px"
           >

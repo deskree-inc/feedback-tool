@@ -3,6 +3,7 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue';
 import { Ref } from 'vue';
 import WidgetForm from './WidgetForm.vue';
 import WidgetStart from './WidgetStart.vue';
+import WidgetSuccess from './WidgetSuccess.vue';
 
 export interface FeedbackTypeInterface {
   id: string;
@@ -18,6 +19,15 @@ function handleSelectedFeedbackType(event: any) {
   selectedFeedbackType.value = event;
   isFormTypeSelected.value = true;
 }
+
+const isSuccessful = ref(false);
+
+function handleSuccessful() {
+  isFormTypeSelected.value = false;
+  isSuccessful.value = true;
+}
+
+const feedbackUid = ref('');
 </script>
 
 <template>
@@ -26,14 +36,17 @@ function handleSelectedFeedbackType(event: any) {
   >
     <PopoverPanel>
       <WidgetStart
-        v-if="!isFormTypeSelected"
+        v-if="!isFormTypeSelected && !isSuccessful"
         @feedback-type-selected="handleSelectedFeedbackType"
       />
       <WidgetForm
         v-else-if="isFormTypeSelected && selectedFeedbackType !== null"
         :feedback="selectedFeedbackType"
         @back="isFormTypeSelected = false"
+        @success="handleSuccessful"
+        @feedback_uid="feedbackUid = $event"
       />
+      <WidgetSuccess v-else-if="isSuccessful" :feedback-uid="feedbackUid" />
     </PopoverPanel>
 
     <PopoverButton
