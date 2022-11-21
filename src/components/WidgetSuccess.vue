@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Ref } from 'vue';
 import CloseButton from './CloseButton.vue';
+import ToastNotification from './ToastNotification.vue';
 
 const props = defineProps<{
   feedbackUid: string;
@@ -79,11 +80,7 @@ function preventPropagation(e: Event) {
   >
     <CloseButton />
     <div class="flex flex-col items-center mt-8 gap-4">
-      <img
-        src="../assets/icons/circular-checkmark.svg"
-        alt=""
-        class="w-11.5 h-11.5"
-      />
+      <img src="/icons/circular-checkmark.svg" alt="" class="w-11.5 h-11.5" />
       <h3 class="font-medium">Feedback Sent</h3>
     </div>
     <p class="text-xs opacity-60 font-normal mt-4 text-center">
@@ -108,13 +105,13 @@ function preventPropagation(e: Event) {
       >
         <img
           v-show="!star.isHovered"
-          src="../assets/icons/star.svg"
+          src="/icons/star.svg"
           alt="Star"
           class="group-hover:opacity-0"
         />
         <img
           v-show="star.isHovered"
-          src="../assets/icons/filled-star.svg"
+          src="/icons/filled-star.svg"
           alt="Filled star"
           class="group-hover:opacity-0"
         />
@@ -129,13 +126,13 @@ function preventPropagation(e: Event) {
       >
         <img
           v-show="!star.isHovered"
-          src="../assets/icons/empty-star.svg"
+          src="/icons/empty-star.svg"
           alt="Disabled star"
           class="group-hover:opacity-0"
         />
         <img
           v-show="star.isHovered"
-          src="../assets/icons/filled-star.svg"
+          src="/icons/filled-star.svg"
           alt="Filled star"
           class="group-hover:opacity-0"
         />

@@ -6,6 +6,6 @@ import { PopoverButton } from '@headlessui/vue';
   <PopoverButton
     class="absolute top-3 right-4 cursor-pointer focus:outline-none"
   >
-    <img src="../assets/icons/close.svg" alt="Close" />
+    <img src="/icons/close.svg" alt="Close" />
   </PopoverButton>
 </template>

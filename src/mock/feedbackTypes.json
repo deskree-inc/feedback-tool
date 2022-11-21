@@ -3,19 +3,19 @@
     {
       "id": "1",
       "title": "Report a bug",
-      "icon": "_nuxt/src/assets/icons/union.svg",
+      "icon": "_nuxt/public/icons/union.svg",
       "type": "bug"
     },
     {
       "id": "2",
       "title": "Suggest a feature",
-      "icon": "_nuxt/src/assets/icons/lamp.svg",
+      "icon": "_nuxt/public/icons/lamp.svg",
       "type": "request"
     },
     {
       "id": "3",
       "title": "Feedback",
-      "icon": "_nuxt/src/assets/icons/feedback.svg",
+      "icon": "_nuxt/public/icons/feedback.svg",
       "type": "feedback"
     }
   ]

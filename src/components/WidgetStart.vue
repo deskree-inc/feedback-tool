@@ -51,12 +51,12 @@ function selectFeedbackType(feedbackType: FeedbackTypeInterface) {
         >
           <span class="font-normal text-xs opacity-40">Powered by</span>
           <img
-            src="@/assets/icons/deskree-logo.svg"
+            src="/icons/deskree-logo.svg"
             alt="Deskree Logo"
             class="opacity-50"
           />
           <img
-            src="@/assets/icons/deskree-name.svg"
+            src="/icons/deskree-name.svg"
             alt="Deskree Name"
             class="opacity-50"
           />

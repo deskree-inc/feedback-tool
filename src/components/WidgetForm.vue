@@ -148,7 +148,7 @@ watchEffect(() => {
   >
     <header class="flex flex-col item-center rounded-t-2xl p-3.5">
       <img
-        src="../assets/icons/left-arrow.svg"
+        src="/icons/left-arrow.svg"
         alt="Back arrow"
         class="w-5 h-4 cursor-pointer"
         @click="$emit('back')"
@@ -193,7 +193,7 @@ watchEffect(() => {
             style="background-position: bottom right; background-size: 180px"
             :disabled="loading"
           >
-            <img src="../assets/icons/delete.svg" alt="Delete icon" />
+            <img src="/icons/delete.svg" alt="Delete icon" />
           </button>
           <button
             type="submit"

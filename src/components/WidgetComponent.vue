@@ -63,7 +63,7 @@ function resetAll() {
     <PopoverButton
       class="bg-gradient-to-r from-deskree-500 to-deskree-600 rounded-full px-3 h-12 text-white flex items-center group focus:outline-none focus:ring-2 focus:ring-deskree-300"
     >
-      <img src="@/assets/icons/feedback.svg" alt="Union" class="w-5 h-5" />
+      <img src="/icons/feedback.svg" alt="Union" class="w-5 h-5" />
       <span
         class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-linear"
       >
