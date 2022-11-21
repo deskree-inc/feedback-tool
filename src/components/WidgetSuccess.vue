@@ -1,57 +1,28 @@
 <script setup lang="ts">
+import { Ref } from 'vue';
 import CloseButton from './CloseButton.vue';
-import StarComponent from './StarComponent.vue';
 
 const props = defineProps<{
   feedbackUid: string;
 }>();
 
-const star1 = ref(false);
-const star2 = ref(false);
-const star3 = ref(false);
-const star4 = ref(false);
-const star5 = ref(false);
-
 const feedbackSent = ref(false);
 
-function handleStar1Hover() {
-  star1.value = true;
-  star2.value = false;
-  star3.value = false;
-  star4.value = false;
-  star5.value = false;
-}
+const error = ref('');
 
-function handleStar2Hover() {
-  star1.value = true;
-  star2.value = true;
-  star3.value = false;
-  star4.value = false;
-  star5.value = false;
-}
+const allStars: Ref<{ id: number; isHovered: boolean }[]> = ref([
+  { id: 1, isHovered: ref(false) },
+  { id: 2, isHovered: ref(false) },
+  { id: 3, isHovered: ref(false) },
+  { id: 4, isHovered: ref(false) },
+  { id: 5, isHovered: ref(false) },
+]);
 
-function handleStar3Hover() {
-  star1.value = true;
-  star2.value = true;
-  star3.value = true;
-  star4.value = false;
-  star5.value = false;
-}
-
-function handleStar4Hover() {
-  star1.value = true;
-  star2.value = true;
-  star3.value = true;
-  star4.value = true;
-  star5.value = false;
-}
-
-function handleStar5Hover() {
-  star1.value = true;
-  star2.value = true;
-  star3.value = true;
-  star4.value = true;
-  star5.value = true;
+function handleAllStarsHover(id: number): void {
+  if (feedbackSent.value) return;
+  for (let i = 0; i < 5; i++) {
+    allStars.value[i].isHovered = i <= id;
+  }
 }
 
 async function sendFeedback(rating: number) {
@@ -59,6 +30,7 @@ async function sendFeedback(rating: number) {
     rating,
   };
   try {
+    feedbackSent.value = true;
     await fetch(
       `https://feedback-tool.api.deskree.com/api/v1/rest/collections/feedbacks/${props.feedbackUid}`,
       {
@@ -67,11 +39,37 @@ async function sendFeedback(rating: number) {
         body: JSON.stringify(body),
       }
     );
-    feedbackSent.value = true;
   } catch (e) {
     console.error(e);
-    // TODO: Catch error
   }
+}
+
+const emit = defineEmits<{
+  (e: 'send-another'): void;
+}>();
+
+function handleSendAnother() {
+  emit('send-another');
+  feedbackSent.value = false;
+  allStars.value.forEach(star => (star.isHovered = false));
+}
+
+const showError = ref(false);
+
+function handleDismissError() {
+  showError.value = false;
+}
+
+watchEffect(() => {
+  if (showError.value) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 3000);
+  }
+});
+
+function preventPropagation(e: Event) {
+  e.stopPropagation();
 }
 </script>
 
@@ -96,70 +94,77 @@ async function sendFeedback(rating: number) {
     <p class="text-xs opacity-60 font-normal mt-4 text-center">
       How would you rate your experience?
     </p>
-    <div class="flex items-center justify-center gap-2">
+    <div
+      v-if="!feedbackSent"
+      class="flex items-center justify-center gap-3 pt-2"
+      :onMouseleave="() => handleAllStarsHover(-1)"
+    >
       <div
-        :onMouseover="feedbackSent ? () => {} : handleStar1Hover"
-        @click="sendFeedback(1)"
+        v-for="star in allStars"
+        :key="star.id"
+        :onMouseover="() => handleAllStarsHover(star.id - 1)"
+        @click="sendFeedback(star.id - 1)"
+        class="hover:bg-blue-rgba hover:rounded-full w-6 h-6 flex items-center justify-center cursor-pointer"
       >
-        <img v-show="!star1" src="../assets/icons/star.svg" alt="Star" />
         <img
-          v-show="star1"
+          v-show="!star.isHovered"
+          src="../assets/icons/star.svg"
+          alt="Star"
+          class="group-hover:opacity-0"
+        />
+        <img
+          v-show="star.isHovered"
           src="../assets/icons/filled-star.svg"
           alt="Filled star"
+          class="group-hover:opacity-0"
         />
       </div>
+    </div>
+    <div v-else class="flex items-center justify-center gap-3 pt-2">
       <div
-        :onMouseover="feedbackSent ? () => {} : handleStar2Hover"
-        @click="sendFeedback(2)"
+        v-for="star in allStars"
+        :key="star.id"
+        @click="sendFeedback(star.id - 1)"
+        class="hover:bg-transparent w-6 h-6 flex items-center justify-center"
       >
-        <img v-show="!star2" src="../assets/icons/star.svg" alt="Star" />
         <img
-          v-show="star2"
-          src="../assets/icons/filled-star.svg"
-          alt="Filled star"
+          v-show="!star.isHovered"
+          src="../assets/icons/empty-star.svg"
+          alt="Disabled star"
+          class="group-hover:opacity-0"
         />
-      </div>
-      <div
-        :onMouseover="feedbackSent ? () => {} : handleStar3Hover"
-        @click="sendFeedback(3)"
-      >
-        <img v-show="!star3" src="../assets/icons/star.svg" alt="Star" />
         <img
-          v-show="star3"
+          v-show="star.isHovered"
           src="../assets/icons/filled-star.svg"
           alt="Filled star"
-        />
-      </div>
-      <div
-        :onMouseover="feedbackSent ? () => {} : handleStar4Hover"
-        @click="sendFeedback(4)"
-      >
-        <img v-show="!star4" src="../assets/icons/star.svg" alt="Star" />
-        <img
-          v-show="star4"
-          src="../assets/icons/filled-star.svg"
-          alt="Filled star"
-        />
-      </div>
-      <div
-        :onMouseover="feedbackSent ? () => {} : handleStar5Hover"
-        @click="sendFeedback(5)"
-      >
-        <img v-show="!star5" src="../assets/icons/star.svg" alt="Star" />
-        <img
-          v-show="star5"
-          src="../assets/icons/filled-star.svg"
-          alt="Filled star"
+          class="group-hover:opacity-0"
         />
       </div>
     </div>
     <div class="flex px-4 gap-2 w-full flex-col">
       <div class="flex flex-col gap-4 mt-2">
         <span
+          @click="handleSendAnother"
           class="text-xs text-deskree-600 hover:text-white text-center cursor-pointer mb-2 transition-colors"
           >Send another feedback</span
         >
       </div>
     </div>
+    <transition
+      enter-active-class="animate-fade-in-up"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="animate-fade-out-down"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <ToastNotification
+        v-show="showError"
+        @click="handleDismissError"
+        class="cursor-pointer inset-0 overflow-hidden transition-opacity"
+      >
+        {{ error }}
+      </ToastNotification>
+    </transition>
   </div>
 </template>

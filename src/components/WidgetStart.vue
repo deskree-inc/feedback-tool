@@ -34,7 +34,7 @@ function selectFeedbackType(feedbackType: FeedbackTypeInterface) {
       <TabGroup
         v-for="feedbackType in types"
         :id="feedbackType.id"
-        class="hover:bg-black rounded-lg cursor-pointer px-2 h-12 mx-2 flex items-center transition-colors"
+        class="hover:bg-hover-rgba rounded-lg cursor-pointer px-2 h-12 mx-2 flex items-center transition-colors"
       >
         <FeedbackType
           :id="feedbackType.id"

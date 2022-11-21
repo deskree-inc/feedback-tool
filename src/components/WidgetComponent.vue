@@ -28,6 +28,13 @@ function handleSuccessful() {
 }
 
 const feedbackUid = ref('');
+
+function resetAll() {
+  isFormTypeSelected.value = false;
+  isSuccessful.value = false;
+  selectedFeedbackType.value = null;
+  feedbackUid.value = '';
+}
 </script>
 
 <template>
@@ -46,7 +53,11 @@ const feedbackUid = ref('');
         @success="handleSuccessful"
         @feedback_uid="feedbackUid = $event"
       />
-      <WidgetSuccess v-else-if="isSuccessful" :feedback-uid="feedbackUid" />
+      <WidgetSuccess
+        v-else-if="isSuccessful"
+        :feedback-uid="feedbackUid"
+        @send-another="resetAll"
+      />
     </PopoverPanel>
 
     <PopoverButton

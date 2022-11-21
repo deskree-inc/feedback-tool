@@ -2,7 +2,7 @@
   <div class="w-6 h-6 flex items-center justify-center overflow-hidden">
     <svg class="w-4 h-4 animate-spin" fill="none">
       <path
-        stroke="#A1A1AA"
+        stroke="#fff"
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"

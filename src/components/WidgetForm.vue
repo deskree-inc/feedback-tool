@@ -2,6 +2,8 @@
 import { Ref } from 'vue';
 import CloseButton from './CloseButton.vue';
 import html2canvas from 'html2canvas';
+import LoadingWidget from './LoadingWidget.vue';
+import ToastNotification from './ToastNotification.vue';
 
 const props = defineProps<{
   feedback: {
@@ -32,6 +34,7 @@ interface GitHubCreateIssueInterface {
 const isTakingScreenshot = ref(false);
 const message: Ref<string> = ref('');
 const image: Ref<string | undefined> = ref(undefined);
+const error = ref('');
 
 async function handleTakeScreenshot(): Promise<void> {
   isTakingScreenshot.value = true;
@@ -56,9 +59,11 @@ async function createIssueOnGitHub(body: GitHubCreateIssueInterface) {
         body: JSON.stringify(body),
       }
     );
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
-    // TODO: Catch error
+    showError.value = true;
+    loading.value = false;
+    error.value = e;
   }
 }
 
@@ -74,16 +79,28 @@ async function createFeedback(body: SendFeedbackBodyInterface) {
     );
 
     const { data } = await res.json();
-    emit('feedback_uid', data.uid);
-  } catch (e) {
+
+    if (data !== undefined) {
+      emit('feedback_uid', data.uid);
+    } else {
+      throw new Error("Couldn't create feedback");
+    }
+  } catch (e: any) {
     console.error(e);
-    // TODO: Catch error
+    showError.value = true;
+    loading.value = false;
+    error.value = e;
   } finally {
-    image.value = undefined;
+    if (!showError.value) {
+      image.value = undefined;
+    }
   }
 }
 
+const loading = ref(false);
+
 async function sendFeedback() {
+  loading.value = true;
   let feedbackBody: SendFeedbackBodyInterface = {
     type: props.feedback.type,
     message: message.value,
@@ -94,6 +111,7 @@ async function sendFeedback() {
   }
 
   await createFeedback(feedbackBody);
+  if (showError.value) return;
 
   if (props.feedback.type === 'bug') {
     const gitHubBody: GitHubCreateIssueInterface = {
@@ -105,8 +123,23 @@ async function sendFeedback() {
   }
 
   message.value = '';
+  loading.value = false;
   emit('success');
 }
+
+const showError = ref(false);
+
+function handleDismissError() {
+  showError.value = false;
+}
+
+watchEffect(() => {
+  if (showError.value) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 3000);
+  }
+});
 </script>
 
 <template>
@@ -158,17 +191,36 @@ async function sendFeedback() {
             class="p-1 w-8 h-8 rounded-md border-2 border-deskree-300 flex justify-end items-end text-zinc-400 hover:text-zinc-100 transition-colors"
             :style="{ backgroundImage: `url(${image})` }"
             style="background-position: bottom right; background-size: 180px"
+            :disabled="loading"
           >
             <img src="../assets/icons/delete.svg" alt="Delete icon" />
           </button>
           <button
             type="submit"
-            class="bg-deskree-600 hover:bg-deskree-300 transition-colors rounded-lg min-h-[39px]"
+            class="bg-deskree-600 hover:bg-deskree-300 transition-colors rounded-lg min-h-[39px] flex items-center justify-center mb-2 disabled:bg-deskree-300 disabled:cursor-not-allowed"
+            :disabled="loading"
           >
-            Send
+            <LoadingWidget v-if="loading" />
+            <span v-else>Send</span>
           </button>
         </div>
       </form>
     </div>
+    <transition
+      enter-active-class="animate-fade-in-up"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="animate-fade-out-down"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <ToastNotification
+        v-show="showError"
+        @click="handleDismissError"
+        class="cursor-pointer inset-0 overflow-hidden transition-opacity"
+      >
+        {{ error }}
+      </ToastNotification>
+    </transition>
   </div>
 </template>
