@@ -4,6 +4,12 @@ import CloseButton from './CloseButton.vue';
 import html2canvas from 'html2canvas';
 import LoadingWidget from './LoadingWidget.vue';
 import ToastNotification from './ToastNotification.vue';
+import {
+  SendFeedbackBodyInterface,
+  GitHubCreateIssueInterface,
+} from '../interfaces/feedback';
+
+const config = useRuntimeConfig();
 
 const props = defineProps<{
   feedback: {
@@ -20,21 +26,12 @@ const emit = defineEmits<{
   (event: 'feedback_uid', ...args: any[]): void;
 }>();
 
-interface SendFeedbackBodyInterface {
-  type: 'bug' | 'request' | 'feedback';
-  message: string;
-  image?: string | undefined;
-}
-
-interface GitHubCreateIssueInterface {
-  title: string;
-  body: string;
-}
-
-const isTakingScreenshot = ref(false);
-const message: Ref<string> = ref('');
 const image: Ref<string | undefined> = ref(undefined);
+const message: Ref<string> = ref('');
+const isTakingScreenshot = ref(false);
 const error = ref('');
+const loading = ref(false);
+const showError = ref(false);
 
 async function handleTakeScreenshot(): Promise<void> {
   isTakingScreenshot.value = true;
@@ -52,7 +49,7 @@ async function handleTakeScreenshot(): Promise<void> {
 async function createIssueOnGitHub(body: GitHubCreateIssueInterface) {
   try {
     await fetch(
-      'https://feedback-tool.api.deskree.com/api/v1/integrations/github/repos/deskree-inc/feedback-tool/issues',
+      `https://${config.PROJECT_ID}.api.deskree.com/api/v1/integrations/github/repos/${config.GITHUB_USERNAME}/feedback-tool/issues`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -70,7 +67,7 @@ async function createIssueOnGitHub(body: GitHubCreateIssueInterface) {
 async function createFeedback(body: SendFeedbackBodyInterface) {
   try {
     const res = await fetch(
-      'https://feedback-tool.api.deskree.com/api/v1/rest/collections/feedbacks',
+      `https://${config.PROJECT_ID}.api.deskree.com/api/v1/rest/collections/feedbacks`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -97,8 +94,6 @@ async function createFeedback(body: SendFeedbackBodyInterface) {
   }
 }
 
-const loading = ref(false);
-
 async function sendFeedback() {
   loading.value = true;
   let feedbackBody: SendFeedbackBodyInterface = {
@@ -121,13 +116,10 @@ async function sendFeedback() {
 
     await createIssueOnGitHub(gitHubBody);
   }
-
   message.value = '';
   loading.value = false;
   emit('success');
 }
-
-const showError = ref(false);
 
 function handleDismissError() {
   showError.value = false;
@@ -197,7 +189,7 @@ watchEffect(() => {
           </button>
           <button
             type="submit"
-            class="bg-deskree-600 hover:bg-deskree-300 transition-colors rounded-lg min-h-[39px] flex items-center justify-center mb-2 disabled:bg-deskree-300 disabled:cursor-not-allowed"
+            class="bg-deskree-600 hover:bg-deskree-300 transition-colors rounded-lg min-h-[39px] flex items-center justify-center mb-2 disabled:bg-deskree-300 disabled:opacity-40 disabled:cursor-not-allowed"
             :disabled="loading"
           >
             <LoadingWidget v-if="loading" />

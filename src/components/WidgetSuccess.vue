@@ -3,12 +3,17 @@ import { Ref } from 'vue';
 import CloseButton from './CloseButton.vue';
 import ToastNotification from './ToastNotification.vue';
 
+const config = useRuntimeConfig();
+
 const props = defineProps<{
   feedbackUid: string;
 }>();
 
-const feedbackSent = ref(false);
+const emit = defineEmits<{
+  (e: 'send-another'): void;
+}>();
 
+const feedbackSent = ref(false);
 const error = ref('');
 
 const allStars: Ref<{ id: number; isHovered: boolean }[]> = ref([
@@ -33,7 +38,7 @@ async function sendFeedback(rating: number) {
   try {
     feedbackSent.value = true;
     await fetch(
-      `https://feedback-tool.api.deskree.com/api/v1/rest/collections/feedbacks/${props.feedbackUid}`,
+      `https://${config.PROJECT_ID}.api.deskree.com/api/v1/rest/collections/feedbacks/${props.feedbackUid}`,
       {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -44,10 +49,6 @@ async function sendFeedback(rating: number) {
     console.error(e);
   }
 }
-
-const emit = defineEmits<{
-  (e: 'send-another'): void;
-}>();
 
 function handleSendAnother() {
   emit('send-another');
@@ -68,10 +69,6 @@ watchEffect(() => {
     }, 3000);
   }
 });
-
-function preventPropagation(e: Event) {
-  e.stopPropagation();
-}
 </script>
 
 <template>

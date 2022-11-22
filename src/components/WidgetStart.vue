@@ -3,12 +3,7 @@ import { TabGroup } from '@headlessui/vue';
 import { types } from '../mock/feedbackTypes.json';
 import FeedbackType from './FeedbackType.vue';
 import CloseButton from './CloseButton.vue';
-
-interface FeedbackTypeInterface {
-  id: string;
-  title: string;
-  icon: string;
-}
+import { FeedbackTypeInterface } from '../interfaces/feedback';
 
 const emit = defineEmits(['feedback-type-selected']);
 

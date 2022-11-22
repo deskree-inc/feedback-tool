@@ -15,4 +15,8 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  publicRuntimeConfig: {
+    PROJECT_ID: process.env.PROJECT_ID,
+    GITHUB_USERNAME: process.env.GITHUB_USERNAME,
+  },
 });
