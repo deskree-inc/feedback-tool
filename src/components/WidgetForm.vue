@@ -48,7 +48,7 @@ async function handleTakeScreenshot(): Promise<void> {
 
 async function createIssueOnGitHub(body: GitHubCreateIssueInterface) {
   try {
-    await fetch(
+    const res = await fetch(
       `https://${config.PROJECT_ID}.api.deskree.com/api/v1/integrations/github/repos/${config.GITHUB_USERNAME}/feedback-tool/issues`,
       {
         method: 'POST',
@@ -56,6 +56,10 @@ async function createIssueOnGitHub(body: GitHubCreateIssueInterface) {
         body: JSON.stringify(body),
       }
     );
+
+    if (!res.ok) {
+      throw new Error('Error creating issue on GitHub');
+    }
   } catch (e: any) {
     console.error(e);
     showError.value = true;
@@ -95,30 +99,42 @@ async function createFeedback(body: SendFeedbackBodyInterface) {
 }
 
 async function sendFeedback() {
-  loading.value = true;
-  let feedbackBody: SendFeedbackBodyInterface = {
-    type: props.feedback.type,
-    message: message.value,
-  };
-
-  if (image !== undefined) {
-    feedbackBody.image = image.value;
-  }
-
-  await createFeedback(feedbackBody);
-  if (showError.value) return;
-
-  if (props.feedback.type === 'bug') {
-    const gitHubBody: GitHubCreateIssueInterface = {
-      title: 'Bug Found by User',
-      body: message.value,
+  try {
+    loading.value = true;
+    let feedbackBody: SendFeedbackBodyInterface = {
+      type: props.feedback.type,
+      message: message.value,
     };
 
-    await createIssueOnGitHub(gitHubBody);
+    if (message.value === '') {
+      throw new Error('Message is required');
+    }
+
+    if (image !== undefined) {
+      feedbackBody.image = image.value;
+    }
+
+    await createFeedback(feedbackBody);
+    if (showError.value) return;
+
+    if (props.feedback.type === 'bug') {
+      const gitHubBody: GitHubCreateIssueInterface = {
+        title: 'Bug Found by User',
+        body: message.value,
+      };
+
+      await createIssueOnGitHub(gitHubBody);
+      if (showError.value) return;
+    }
+    message.value = '';
+    loading.value = false;
+    emit('success');
+  } catch (e: any) {
+    console.error(e);
+    showError.value = true;
+    loading.value = false;
+    error.value = e;
   }
-  message.value = '';
-  loading.value = false;
-  emit('success');
 }
 
 function handleDismissError() {
