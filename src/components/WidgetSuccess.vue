@@ -32,6 +32,7 @@ function handleAllStarsHover(id: number): void {
 }
 
 async function sendFeedback(rating: number) {
+  rating += 1;
   const body = {
     rating,
   };
