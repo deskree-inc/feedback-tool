@@ -49,7 +49,7 @@ async function handleTakeScreenshot(): Promise<void> {
 async function createIssueOnGitHub(body: GitHubCreateIssueInterface) {
   try {
     const res = await fetch(
-      `https://${config.PROJECT_ID}.api.deskree.com/api/v1/integrations/github/repos/${config.GITHUB_USERNAME}/feedback-tool/issues`,
+      `https://${config.PROJECT_ID}.api-dev.deskree.com/api/v1/integrations/github/repos/${config.GITHUB_USERNAME}/feedback-tool/issues`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -71,7 +71,7 @@ async function createIssueOnGitHub(body: GitHubCreateIssueInterface) {
 async function createFeedback(body: SendFeedbackBodyInterface) {
   try {
     const res = await fetch(
-      `https://${config.PROJECT_ID}.api.deskree.com/api/v1/rest/collections/feedbacks`,
+      `https://${config.PROJECT_ID}.api-dev.deskree.com/api/v1/rest/collections/feedbacks`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

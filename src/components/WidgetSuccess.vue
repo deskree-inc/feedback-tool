@@ -32,14 +32,13 @@ function handleAllStarsHover(id: number): void {
 }
 
 async function sendFeedback(rating: number) {
-  rating += 1;
   const body = {
     rating,
   };
   try {
     feedbackSent.value = true;
     await fetch(
-      `https://${config.PROJECT_ID}.api.deskree.com/api/v1/rest/collections/feedbacks/${props.feedbackUid}`,
+      `https://${config.PROJECT_ID}.api-dev.deskree.com/api/v1/rest/collections/feedbacks/${props.feedbackUid}`,
       {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -98,7 +97,7 @@ watchEffect(() => {
         v-for="star in allStars"
         :key="star.id"
         :onMouseover="() => handleAllStarsHover(star.id - 1)"
-        @click="sendFeedback(star.id - 1)"
+        @click="sendFeedback(star.id)"
         class="hover:bg-blue-rgba hover:rounded-full w-6 h-6 flex items-center justify-center cursor-pointer"
       >
         <img
@@ -119,7 +118,6 @@ watchEffect(() => {
       <div
         v-for="star in allStars"
         :key="star.id"
-        @click="sendFeedback(star.id - 1)"
         class="hover:bg-transparent w-6 h-6 flex items-center justify-center"
       >
         <img
