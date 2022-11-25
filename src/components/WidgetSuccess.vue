@@ -38,7 +38,7 @@ async function sendFeedback(rating: number) {
   try {
     feedbackSent.value = true;
     await fetch(
-      `https://${config.PROJECT_ID}.api-dev.deskree.com/api/v1/rest/collections/feedbacks/${props.feedbackUid}`,
+      `https://${config.PROJECT_ID}.api.deskree.com/api/v1/rest/collections/feedbacks/${props.feedbackUid}`,
       {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
