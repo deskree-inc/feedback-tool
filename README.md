@@ -1,4 +1,4 @@
-<h1>#Feedback Tool</h1>
+<h1 align="center">#Feedback Tool</h1>
 
 <br>
 
