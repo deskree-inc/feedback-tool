@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue';
 import { Ref } from 'vue';
-import WidgetForm from './WidgetForm.vue';
-import WidgetStart from './WidgetStart.vue';
-import WidgetSuccess from './WidgetSuccess.vue';
 
 export interface FeedbackTypeInterface {
   id: string;
@@ -42,18 +39,18 @@ function resetAll() {
     class="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex flex-col items-end"
   >
     <PopoverPanel>
-      <WidgetStart
+      <AppWidgetStart
         v-if="!isFormTypeSelected && !isSuccessful"
         @feedback-type-selected="handleSelectedFeedbackType"
       />
-      <WidgetForm
+      <AppWidgetForm
         v-else-if="isFormTypeSelected && selectedFeedbackType !== null"
         :feedback="selectedFeedbackType"
         @back="isFormTypeSelected = false"
         @success="handleSuccessful"
         @feedback_uid="feedbackUid = $event"
       />
-      <WidgetSuccess
+      <AppWidgetSuccess
         v-else-if="isSuccessful"
         :feedback-uid="feedbackUid"
         @send-another="resetAll"

@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { Ref } from 'vue';
-import CloseButton from './CloseButton.vue';
 import html2canvas from 'html2canvas';
-import LoadingWidget from './LoadingWidget.vue';
-import ToastNotification from './ToastNotification.vue';
 import {
   SendFeedbackBodyInterface,
   GitHubCreateIssueInterface,
-} from '../interfaces/feedback';
+} from '../../interfaces/feedback';
 
 const config = useRuntimeConfig();
 
@@ -137,7 +134,7 @@ watchEffect(() => {
         class="w-5 h-4 cursor-pointer"
         @click="$emit('back')"
       />
-      <CloseButton />
+      <AppCloseButton />
       <div class="flex items-center mt-4 gap-2">
         <span
           class="flex items-center justify-center bg-gradient-to-r from-deskree-500 to-deskree-600 rounded-full w-8 h-8"
@@ -184,7 +181,7 @@ watchEffect(() => {
             class="bg-deskree-600 hover:bg-deskree-300 transition-colors rounded-lg min-h-[39px] flex items-center justify-center mb-2 disabled:bg-deskree-300 disabled:opacity-40 disabled:cursor-not-allowed"
             :disabled="loading"
           >
-            <LoadingWidget v-if="loading" />
+            <AppLoadingWidget v-if="loading" />
             <span v-else>Send</span>
           </button>
         </div>
@@ -198,13 +195,13 @@ watchEffect(() => {
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <ToastNotification
+      <AppToastNotification
         v-show="showError"
         @click="handleDismissError"
         class="cursor-pointer inset-0 overflow-hidden transition-opacity"
       >
         {{ error }}
-      </ToastNotification>
+      </AppToastNotification>
     </transition>
   </div>
 </template>
