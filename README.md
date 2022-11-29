@@ -1,42 +1,38 @@
-# Nuxt 3 Minimal Starter
+<h1 align="center">
+  <img alt="Deskree" title="Deskree" src=".github/logo.png" />
+</h1>
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+<br>
 
-## Setup
+<p align="center">
+  <img alt="Feedback Tool" src=".github/Thumbnail.png" width="100%">
+</p>
 
-Make sure to install the dependencies:
+## ✨ Technologies
 
-```bash
-# yarn
-yarn install
+This project was made by using:
 
-# npm
-npm install
+- [Vue](https://vuejs.org/)
+- [Nuxt.js](https://nuxtjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
 
-# pnpm
-pnpm install --shamefully-hoist
-```
+## 💻 Project
 
-## Development Server
+Feedback tool is an app built using Nuxt 3 to make easier for your users to send you a feedback.
 
-Start the development server on http://localhost:3000
+## 🚀 How to run it
 
-```bash
-npm run dev
-```
+- Fork the repository
+- Install the dependecies with `npm i`
+- Create the .env file with the right variables
+- Start the server `npm run dev`
 
-## Production
+You can access using [`localhost:3000`](http://localhost:3000) on your browser.
 
-Build the application for production:
+## 📄 License
 
-```bash
-npm run build
-```
+This project is under MIT license.
 
-Locally preview production build:
+---
 
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/guide/deploy/presets) for more information.
+Powered by <img alt="Deskree" src=".github/poweredby-deskree.png" />
