@@ -1,6 +1,4 @@
-<h1 align="center">
-  <img alt="Deskree" title="Deskree" src=".github/logo.png" />
-</h1>
+<h1>#Feedback Tool</h1>
 
 <br>
 
