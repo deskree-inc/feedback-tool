@@ -16,7 +16,7 @@ This project was made by using:
 
 ## 💻 Project
 
-Feedback tool is an app built using Nuxt 3 to make easier for your users to send you a feedback.
+Feedback tool is an app built using Nuxt 3 to make easier for your users to send you feedback.
 
 ## 🚀 How to run it
 
