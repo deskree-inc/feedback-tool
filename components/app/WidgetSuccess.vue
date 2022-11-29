@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { Ref } from 'vue';
-import CloseButton from './CloseButton.vue';
-import ToastNotification from './ToastNotification.vue';
 
 const config = useRuntimeConfig();
 
@@ -66,7 +64,7 @@ watchEffect(() => {
 <template>
   <div
     class="bg-[#1E1E20] rounded-2xl mb-4 shadow-lg w-[calc(100vw-2rem)] min-h-[330px] px-4 md:w-auto sm:w-auto flex flex-col justify-evenly">
-    <CloseButton />
+    <AppCloseButton />
     <div class="flex flex-col items-center mt-8 gap-4">
       <img src="/icons/circular-checkmark.svg" alt="" class="w-11.5 h-11.5" />
       <h3 class="font-medium">Feedback Sent</h3>
@@ -104,10 +102,10 @@ watchEffect(() => {
     </div>
     <transition enter-active-class="animate-fade-in-up" enter-from-class="opacity-0" enter-to-class="opacity-100"
       leave-active-class="animate-fade-out-down" leave-from-class="opacity-100" leave-to-class="opacity-0">
-      <ToastNotification v-show="showError" @click="handleDismissError"
+      <AppToastNotification v-show="showError" @click="handleDismissError"
         class="cursor-pointer inset-0 overflow-hidden transition-opacity">
         {{ error }}
-      </ToastNotification>
+      </AppToastNotification>
     </transition>
   </div>
 </template>

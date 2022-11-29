@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { TabGroup } from '@headlessui/vue';
-import { types } from '../mock/feedbackTypes.json';
-import FeedbackType from './FeedbackType.vue';
-import CloseButton from './CloseButton.vue';
-import { FeedbackTypeInterface } from '../interfaces/feedback';
+import { types } from '../../mock/feedbackTypes.json';
+import { FeedbackTypeInterface } from '../../interfaces/feedback';
 
 const emit = defineEmits(['feedback-type-selected']);
 
@@ -17,7 +15,7 @@ function selectFeedbackType(feedbackType: FeedbackTypeInterface) {
     <header
       class="bg-deskree-600 flex flex-col item-center rounded-t-2xl p-3.5"
     >
-      <CloseButton />
+      <AppCloseButton />
       <h3 class="mt-6 font-medium">Send us a feedback</h3>
       <p class="text-xs opacity-60 font-normal">
         Choose one of the feedback type below.
@@ -31,7 +29,7 @@ function selectFeedbackType(feedbackType: FeedbackTypeInterface) {
         :id="feedbackType.id"
         class="hover:bg-hover-rgba rounded-lg cursor-pointer px-2 h-12 mx-2 flex items-center transition-colors"
       >
-        <FeedbackType
+        <AppFeedbackType
           :id="feedbackType.id"
           :title="feedbackType.title"
           :icon="feedbackType.icon"

@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <main>
+    <AppWidgetComponent />
+  </main>
 </template>
